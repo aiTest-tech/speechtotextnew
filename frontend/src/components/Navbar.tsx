@@ -42,14 +42,14 @@ const Navbar: React.FC = () => {
         </div>
         <span>|</span>
         <button className="text-xl flex gap-2 justify-center items-center">
-          <span>A</span>
-          <span className="bg-black rounded-full text-white flex items-center justify-center w-4 h-4 text-xl">
+          <span >A</span>
+          <span className="bg-black rounded-full text-white flex items-center justify-center w-4 h-4 text-xl dark:bg-white dark:text-black">
             +
           </span>
         </button>
         <button className="text-xl flex gap-2 justify-center items-center">
           A{" "}
-          <span className="bg-black rounded-full text-white flex items-center justify-center w-4 h-4 text-xl">
+          <span className="bg-black rounded-full text-white flex items-center justify-center w-4 h-4 text-xl dark:bg-white dark:text-black">
             -
           </span>
         </button>

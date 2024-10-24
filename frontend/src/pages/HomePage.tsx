@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import React from "react";
 import axios from "axios";
 import { BsFillMicFill, BsFillStopFill } from "react-icons/bs";
+import { CgDarkMode } from "react-icons/cg";
+
 // import { Button } from "./components/ui/button"; // Adjust this path as needed
 import { IoMoon, IoSunny } from "react-icons/io5";
 // import Navbar from "./components/Navbar";
@@ -17,6 +19,7 @@ import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 import GrievanceList from "@/components/GrievanceList";
 import Modal from "@/components/Modal";
+import MyForm from "@/components/Form";
 
 const AudioRecorder: React.FC = () => {
   const [dark, setDark] = useState(false);
@@ -207,50 +210,53 @@ const AudioRecorder: React.FC = () => {
       <div>
         <Navbar />
       </div>
-      <div className="bg-white dark:bg-black">
-        <button onClick={darkModeHandler} className="mt-10 absolute right-10">
-          {dark ? <IoSunny size={30} /> : <IoMoon size={30} />}
+      <div className="w-full dark:bg-black">
+        <button onClick={darkModeHandler} className="absolute right-3 mt-3">
+          {dark ? <IoSunny size={30} /> : <CgDarkMode size={30} />}
         </button>
       </div>
-      <div className="dark:bg-black w-[100%] h-[88vh] flex justify-center items-center bg-[url('/cm-banner.jpg')] bg-no-repeat bg-contain bg-center">
-        <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg max-w-md dark:text-[#FBB917] mx-auto md:w-[1000px]">
-          <h2 className="text-4xl font-semibold mb-4 dark:text-orange-500">Audio Recorder</h2>
-          <div className="flex justify-center items-center mb-4">
-            {isRecording ? (
-              <Button className="bg-red-500 text-white flex items-center" onClick={stopRecording}>
-                <BsFillStopFill className="mr-2" /> Stop Recording
-              </Button>
-            ) : (
-              <Button className="bg-orange-500 dark:bg-orange-500 dark:hover:bg-black text-white flex items-center" onClick={startRecording}>
-                <BsFillMicFill size={500} className="mr-2 text-white" /> Start Recording
-              </Button>
-            )}
-          </div>
-          {loading ? (
-            <Loader />
-          ) : (
-            <>
-              {audioUrl && (
-                <audio controls className="w-full mb-4">
-                  <source src={audioUrl} type="audio/wav" />
-                  Your browser does not support the audio element.
-                </audio>
+      <div className="mt-[20px]">
+        <MyForm />
+        <div className="dark:bg-black w-[100%] h-[88vh] flex justify-center items-center bg-[url('/cm-banner.jpg')] bg-no-repeat bg-contain bg-center">
+          <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg max-w-md dark:text-[#FBB917] mx-auto md:w-[1000px]">
+            <h2 className="text-4xl font-semibold mb-4 dark:text-orange-500">Audio Recorder</h2>
+            <div className="flex justify-center items-center mb-4">
+              {isRecording ? (
+                <Button className="bg-red-500 text-white flex items-center" onClick={stopRecording}>
+                  <BsFillStopFill className="mr-2" /> Stop Recording
+                </Button>
+              ) : (
+                <Button className="bg-orange-500 dark:bg-orange-500 dark:hover:bg-black text-white flex items-center" onClick={startRecording}>
+                  <BsFillMicFill size={500} className="mr-2 text-white" /> Start Recording
+                </Button>
               )}
-              {transcription && (
-                <div className="w-full mt-4">
-                  <div className="text-black dark:text-black">
-                    <div className="w-full border-primary p-2 text-black text-3xl">
-                      {transcription}
-                    </div>
-                    <div>
-                      <Button onClick={handleEdit} className="bg-orange-500 text-white">Edit</Button>
+            </div>
+            {loading ? (
+              <Loader />
+            ) : (
+              <>
+                {audioUrl && (
+                  <audio controls className="w-full mb-4">
+                    <source src={audioUrl} type="audio/wav" />
+                    Your browser does not support the audio element.
+                  </audio>
+                )}
+                {transcription && (
+                  <div className="w-full mt-4">
+                    <div className="text-black dark:text-black">
+                      <div className="w-full border-primary p-2 text-black text-3xl">
+                        {transcription}
+                      </div>
+                      <div>
+                        <Button onClick={handleEdit} className="bg-orange-500 text-white">Edit</Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+                )}
+              </>
+            )}
+          </div>
+      </div>
       </div>
       <div>
         <GrievanceList />
