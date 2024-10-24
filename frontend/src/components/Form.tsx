@@ -1,5 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { FaMicrophone } from "react-icons/fa";
+import Recorder from "./Recorder";
 
 type FormData = {
   name: string;
@@ -191,31 +193,12 @@ const MyForm: React.FC = () => {
                 )}
               </div>
 
-              {/* Subject */}
-              <div className="col-span-2">
-                <label
-                  htmlFor="subject"
-                  className="block mb-1 font-bold dark:text-white"
-                >
-                  Subject
-                </label>
-                <input
-                  id="subject"
-                  {...register("subject", { required: true })}
-                  className={`form-input ${
-                    errors.subject
-                      ? "border-red-500"
-                      : "border-orange-500 rounded border-[1px]"
-                  } w-full`}
-                />
-                {errors.subject && (
-                  <div className="text-red-500">This field is required</div>
-                )}
-              </div>
-
               {/* Department */}
               <div className="col-span-2 dark:text-black">
-                <label htmlFor="department" className="block mb-1 font-bold dark:text-white">
+                <label
+                  htmlFor="department"
+                  className="block mb-1 font-bold dark:text-white"
+                >
                   Department
                 </label>
                 <select
@@ -358,6 +341,19 @@ const MyForm: React.FC = () => {
                 </select>
               </div>
 
+              {/* Subject */}
+              <div className="col-span-2">
+                <label
+                  htmlFor="subject"
+                  className="block mb-1 font-bold dark:text-white "
+                >
+                  Subject
+                </label>
+                <div>
+                  <Recorder />
+                </div>
+              </div>
+
               {/* Message */}
               <div className="col-span-2">
                 <label
@@ -366,16 +362,6 @@ const MyForm: React.FC = () => {
                 >
                   Message <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  id="message"
-                  {...register("message", { required: true })}
-                  className={`form-textarea ${
-                    errors.message
-                      ? "border-red-500"
-                      : "border-orange-500 rounded border-[1px]"
-                  } w-full`}
-                  rows={5}
-                ></textarea>
                 {errors.message && (
                   <div className="text-red-500">This field is required</div>
                 )}

@@ -1,29 +1,10 @@
 import { useState, useRef } from "react";
-import React from "react";
-import axios from "axios";
-import { BsFillMicFill, BsFillStopFill } from "react-icons/bs";
-import { CgDarkMode } from "react-icons/cg";
-
-// import { Button } from "./components/ui/button"; // Adjust this path as needed
-import { IoMoon, IoSunny } from "react-icons/io5";
-import Recorder from "@/components/Recorder";
-// import Navbar from "./components/Navbar";
-// import Footer from "./components/Footer";
-// import Loader from "./components/Loader";
-// import GrievanceList from "./components/GrievanceList";
-// import Modal from "./components/Modal"; // Import the Modal component
-
-// import Button from "@/components/Button";
 import { Button } from "@/components/ui/button";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Loader from "@/components/Loader";
-import GrievanceList from "@/components/GrievanceList";
-import Modal from "@/components/Modal";
-import MyForm from "@/components/Form";
-
-const AudioRecorder: React.FC = () => {
-  const [dark, setDark] = useState(false);
+import { BsFillStopFill } from "react-icons/bs";
+import { BsFillMicFill } from "react-icons/bs";
+import axios from "axios";
+const Recorder = () => {
+  const audioChunks = useRef<Blob[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [recordings, setRecordings] = useState<string[]>([]);
@@ -32,14 +13,8 @@ const AudioRecorder: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
-  const audioChunks = useRef<Blob[]>([]);
   const [transcriptionId, setTranscriptionId] = useState<number | null>(null);
 
-  // Toggle Dark Mode
-  const darkModeHandler = () => {
-    setDark(!dark);
-    document.body.classList.toggle("dark");
-  };
 
   // Start Audio Recording
   const startRecording = async () => {
@@ -219,99 +194,25 @@ const AudioRecorder: React.FC = () => {
       }
     }
   };
-
   return (
     <>
-      <div>
-        <Navbar />
-      </div>
-      <div className="w-full dark:bg-black">
-        <button onClick={darkModeHandler} className="absolute right-3 mt-3">
-          {dark ? <IoSunny size={30} /> : <CgDarkMode size={30} />}
-        </button>
-      </div>
-      <div className="mt-[20px]">
-        <MyForm />
-        <div className="dark:bg-black w-[100%] h-[88vh] flex justify-center items-center bg-[url('/cm-banner.jpg')] bg-no-repeat bg-contain bg-center">
-          <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg max-w-md dark:text-[#FBB917] mx-auto md:w-[1000px]">
-            <h2 className="text-4xl font-semibold mb-4 dark:text-orange-500">
-              Audio Recorder
-            </h2>
-            <div className="flex justify-center items-center mb-4">
-              {isRecording ? (
-                <Button
-                  className="bg-red-500 text-white flex items-center"
-                  onClick={stopRecording}
-                >
-                  <BsFillStopFill className="mr-2" /> Stop Recording
-                </Button>
-              ) : (
-                <Button
-                  className="bg-orange-500 dark:bg-orange-500 dark:hover:bg-black text-white flex items-center"
-                  onClick={startRecording}
-                >
-                  <BsFillMicFill size={500} className="mr-2 text-white" /> Start
-                  Recording
-                </Button>
-              )}
-            </div>
-            {loading ? (
-              <Loader />
-            ) : (
-              <>
-                {audioUrl && (
-                  <audio controls className="w-full mb-4">
-                    <source src={audioUrl} type="audio/wav" />
-                    Your browser does not support the audio element.
-                  </audio>
-                )}
-                {transcription && (
-                  <div className="w-full mt-4">
-                    <div className="text-black dark:text-black">
-                      <div className="w-full border-primary p-2 text-black text-3xl">
-                        {transcription}
-                      </div>
-                      <div>
-                        <Button
-                          onClick={handleEdit}
-                          className="bg-orange-500 text-white"
-                        >
-                          Edit
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-      <div>
-        <GrievanceList />
-      </div>
-      <div>
-        <Footer />
-      </div>
-
-      {/* Modal for editing transcription */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        onSubmit={handleModalSubmit}
-        onRemove={handleRemoveTranscription}
-        initialText={editedTranscription}
-      />
+      {isRecording ? (
+        <Button
+          className="bg-red-500 text-white flex items-center"
+          onClick={stopRecording}
+        >
+          <BsFillStopFill className="mr-2" /> 
+        </Button>
+      ) : (
+        <Button
+          className="bg-[#ea580c] dark:bg-orange-500 dark:hover:bg-yellow-600 text-white flex items-center"
+          onClick={startRecording}
+        >
+          <BsFillMicFill size={500} className="mr-2 text-white"/> 
+        </Button>
+      )}
     </>
   );
 };
 
-const HomePage: React.FC = () => {
-  return (
-    <div>
-      <AudioRecorder />
-    </div>
-  );
-};
-
-export default HomePage;
+export default Recorder;
