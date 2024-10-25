@@ -5,11 +5,10 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (text: string) => void;
-  onRemove: () => void;
   initialText: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, onRemove, initialText }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, initialText }) => {
   const [text, setText] = React.useState<string>(initialText);
 
   React.useEffect(() => {

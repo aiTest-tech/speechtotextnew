@@ -1,20 +1,20 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { BsFillStopFill } from "react-icons/bs";
-import { BsFillMicFill } from "react-icons/bs";
+import { BsFillStopFill, BsFillMicFill } from "react-icons/bs";
+import Loader from "./Loader";
 import axios from "axios";
+
 const Recorder = () => {
   const audioChunks = useRef<Blob[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [recordings, setRecordings] = useState<string[]>([]);
   const [transcription, setTranscription] = useState<string | null>(null);
-  const [editedTranscription, setEditedTranscription] = useState<string>(""); // Initialize as empty string
+  const [setEditedTranscription] = useState<string>(""); // Placeholder for future use
   const [loading, setLoading] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [setIsModalOpen] = useState<boolean>(false);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const [transcriptionId, setTranscriptionId] = useState<number | null>(null);
-
 
   // Start Audio Recording
   const startRecording = async () => {
@@ -127,25 +127,20 @@ const Recorder = () => {
       const formData = new FormData();
       formData.append("file", audioBlob);
 
-      const response = await axios.post(
-        "http://localhost:5000/process_audio",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:5000/process_audio", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log("Response from backend:", response.data);
 
-      const transcriptionText =
-        response.data.text || "No transcription available";
+      const transcriptionText = response.data.text || "No transcription available";
       const transcriptionId = response.data.id; // Get the transcription ID from the response
 
       setTranscription(transcriptionText);
-      setEditedTranscription(transcriptionText); // Set the edited transcription immediately
-      setTranscriptionId(transcriptionId); // Store the transcription ID
+      setEditedTranscription(transcriptionText); // Placeholder usage
+      setTranscriptionId(transcriptionId);
     } catch (error) {
       console.error("Error sending audio to backend:", error);
     } finally {
@@ -165,15 +160,12 @@ const Recorder = () => {
   const handleModalSubmit = async (editedText: string) => {
     if (transcriptionId !== null) {
       try {
-        const response = await axios.post(
-          "http://localhost:5000/submit_audio",
-          {
-            id: transcriptionId,
-            text: editedText,
-          }
-        );
+        const response = await axios.post("http://localhost:5000/submit_audio", {
+          id: transcriptionId,
+          text: editedText,
+        });
         console.log("API response:", response.data);
-        setTranscription(editedText); // Update transcription after successful submission
+        setTranscription(editedText);
       } catch (error) {
         console.error("Error submitting edited transcription:", error);
       }
@@ -186,31 +178,66 @@ const Recorder = () => {
         await axios.post("http://localhost:5000/remove_audio", {
           id: transcriptionId,
         });
-        setTranscription(null); // Clear transcription from state
-        setEditedTranscription(""); // Reset edited transcription
+        setTranscription(null);
+        setEditedTranscription(""); // Placeholder usage
         setTranscriptionId(null);
       } catch (error) {
         console.error("Error removing transcription:", error);
       }
     }
   };
+
   return (
     <>
       {isRecording ? (
-        <Button
-          className="bg-red-500 text-white flex items-center"
-          onClick={stopRecording}
-        >
-          <BsFillStopFill className="mr-2" /> 
+        <Button className="bg-red-500 text-white flex items-center" onClick={stopRecording}>
+          <BsFillStopFill className="mr-2" />
         </Button>
       ) : (
-        <Button
-          className="bg-[#ea580c] dark:bg-orange-500 dark:hover:bg-yellow-600 text-white flex items-center"
-          onClick={startRecording}
-        >
-          <BsFillMicFill size={500} className="mr-2 text-white"/> 
+        <Button className="bg-[#ea580c] dark:bg-orange-500 dark:hover:bg-yellow-600 text-white flex items-center" onClick={startRecording}>
+          <BsFillMicFill size={500} className="mr-2 text-white" />
         </Button>
       )}
+      <div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            {audioUrl && (
+              <audio controls className="w-full mb-4">
+                <source src={audioUrl} type="audio/wav" />
+                Your browser does not support the audio element.
+              </audio>
+            )}
+            {transcription && (
+              <div className="w-full mt-4">
+                <div className="text-black dark:text-black">
+                  <div className="w-full border-primary p-2 text-black text-3xl">
+                    {transcription}
+                  </div>
+                  <div>
+                    <Button onClick={handleEdit} className="bg-orange-500 text-white">
+                      Edit
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+            {recordings.length > 0 && (
+              <div>
+                <h3>Recordings:</h3>
+                <ul>
+                  {recordings.map((recording, index) => (
+                    <li key={index}>
+                      <audio controls src={recording} className="w-full mb-4" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 };

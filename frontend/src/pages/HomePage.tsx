@@ -4,16 +4,7 @@ import axios from "axios";
 import { BsFillMicFill, BsFillStopFill } from "react-icons/bs";
 import { CgDarkMode } from "react-icons/cg";
 
-// import { Button } from "./components/ui/button"; // Adjust this path as needed
-import { IoMoon, IoSunny } from "react-icons/io5";
-import Recorder from "@/components/Recorder";
-// import Navbar from "./components/Navbar";
-// import Footer from "./components/Footer";
-// import Loader from "./components/Loader";
-// import GrievanceList from "./components/GrievanceList";
-// import Modal from "./components/Modal"; // Import the Modal component
-
-// import Button from "@/components/Button";
+import {  IoSunny } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -153,7 +144,7 @@ const AudioRecorder: React.FC = () => {
       formData.append("file", audioBlob);
 
       const response = await axios.post(
-        "http://localhost:5000/process_audio",
+        "http://10.10.2.179:5000/process_audio",
         formData,
         {
           headers: {
